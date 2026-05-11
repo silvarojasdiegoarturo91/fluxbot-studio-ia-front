@@ -1,0 +1,225 @@
+openapi: 3.1.0
+info:
+  title: FluxBot External Widget API
+  version: 1.0.0
+  description: Public contract for the embeddable external widget channel.
+servers:
+  - url: https://api.fluxbot.ai
+paths:
+  /api/v1/widget/chat:
+    post:
+      operationId: sendWidgetMessage
+      summary: Send a message from an embedded external website widget
+      tags:
+        - Widget
+      security:
+        - widgetToken: []
+      parameters:
+        - name: Origin
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WidgetChatRequest'
+      responses:
+        '200':
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WidgetChatResponse'
+        '401':
+          description: Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
+        '403':
+          description: Domain not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
+        '500':
+          description: Unexpected backend error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
+
+  /api/v1/widget/connection-test:
+    post:
+      operationId: testWidgetConnection
+      summary: Validate widget token, endpoint and allowed domain
+      tags:
+        - Widget
+      security:
+        - widgetToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WidgetConnectionTestRequest'
+      responses:
+        '200':
+          description: Connection test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WidgetConnectionTestResponse'
+        '401':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
+        '403':
+          description: Domain not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
+
+components:
+  securitySchemes:
+    widgetToken:
+      type: http
+      scheme: bearer
+
+  schemas:
+    WidgetChatRequest:
+      type: object
+      required:
+        - message
+        - sessionId
+        - metadata
+      properties:
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        sessionId:
+          type: string
+        conversationId:
+          type:
+            - string
+            - 'null'
+        metadata:
+          type: object
+          required:
+            - channel
+            - url
+            - title
+          properties:
+            channel:
+              type: string
+              enum:
+                - external-widget
+            url:
+              type: string
+            title:
+              type:
+                - string
+                - 'null'
+            locale:
+              type:
+                - string
+                - 'null'
+            referrer:
+              type:
+                - string
+                - 'null'
+            userAgent:
+              type:
+                - string
+                - 'null'
+
+    WidgetChatResponse:
+      type: object
+      required:
+        - reply
+        - conversationId
+        - messageId
+      properties:
+        reply:
+          type: string
+        conversationId:
+          type: string
+        messageId:
+          type: string
+        usage:
+          type:
+            - object
+            - 'null'
+          properties:
+            inputTokens:
+              type: integer
+            outputTokens:
+              type: integer
+            totalTokens:
+              type: integer
+        errorCode:
+          type:
+            - string
+            - 'null'
+
+    WidgetConnectionTestRequest:
+      type: object
+      required:
+        - domain
+      properties:
+        domain:
+          type: string
+        apiVersion:
+          type: string
+          default: v1
+
+    WidgetConnectionTestResponse:
+      type: object
+      required:
+        - ok
+        - tenantId
+        - allowedDomain
+      properties:
+        ok:
+          type: boolean
+        tenantId:
+          type: string
+        allowedDomain:
+          type: boolean
+        apiVersion:
+          type: string
+
+    PublicApiError:
+      type: object
+      required:
+        - errorCode
+        - message
+      properties:
+        errorCode:
+          type: string
+          enum:
+            - INVALID_TOKEN
+            - DOMAIN_NOT_ALLOWED
+            - RATE_LIMITED
+            - VALIDATION_ERROR
+            - BACKEND_UNAVAILABLE
+            - INTERNAL_ERROR
+        message:
+          type: string
+        requestId:
+          type:
+            - string
+            - 'null'
