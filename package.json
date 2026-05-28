@@ -9,10 +9,12 @@
     "api:sync": "npm run contracts:pull && npm run api:generate",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "qa:gate": "npm run contracts:pull && npm run typecheck && npm run lint && npm run test",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "githooks:install": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "next": "16.2.6",

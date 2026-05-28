@@ -17,7 +17,22 @@ paths:
       parameters:
         - name: Origin
           in: header
+          required: true
+          description: Origin of the requesting page (must match allowlist)
+          schema:
+            type: string
+            format: uri
+        - name: X-Correlation-Id
+          in: header
           required: false
+          description: Optional correlation ID for request tracing
+          schema:
+            type: string
+            format: uuid
+        - name: X-Client-Version
+          in: header
+          required: false
+          description: Widget version
           schema:
             type: string
       requestBody:
@@ -28,31 +43,67 @@ paths:
               $ref: '#/components/schemas/WidgetChatRequest'
       responses:
         '200':
-          description: Chat response
+          description: Chat response - successful message processing
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WidgetChatResponse'
+        '400':
+          description: Validation error - malformed request
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicApiError'
         '401':
-          description: Invalid or missing token
+          description: Authentication failed - invalid, expired, or missing token
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicApiError'
         '403':
-          description: Domain not allowed
+          description: Access denied - domain not allowed or request forbidden
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicApiError'
         '429':
-          description: Rate limit exceeded
+          description: Rate limit exceeded - too many requests
+          headers:
+            X-Rate-Limit-Limit:
+              $ref: '#/components/headers/X-Rate-Limit-Limit'
+            X-Rate-Limit-Remaining:
+              $ref: '#/components/headers/X-Rate-Limit-Remaining'
+            X-Rate-Limit-Reset:
+              $ref: '#/components/headers/X-Rate-Limit-Reset'
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicApiError'
         '500':
-          description: Unexpected backend error
+          description: Internal server error - unexpected backend issue
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
@@ -61,11 +112,25 @@ paths:
   /api/v1/widget/connection-test:
     post:
       operationId: testWidgetConnection
-      summary: Validate widget token, endpoint and allowed domain
+      summary: Validate widget token, endpoint and allowed domain (before chat)
       tags:
         - Widget
       security:
         - widgetToken: []
+      parameters:
+        - name: Origin
+          in: header
+          required: true
+          description: Origin of the requesting page
+          schema:
+            type: string
+            format: uri
+        - name: X-Correlation-Id
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -74,19 +139,28 @@ paths:
               $ref: '#/components/schemas/WidgetConnectionTestRequest'
       responses:
         '200':
-          description: Connection test result
+          description: Connection test successful - widget is ready
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WidgetConnectionTestResponse'
         '401':
-          description: Invalid token
+          description: Authentication failed
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicApiError'
         '403':
           description: Domain not allowed
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/X-Correlation-Id'
           content:
             application/json:
               schema:
@@ -97,6 +171,45 @@ components:
     widgetToken:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Widget authentication token (format: fbw_live_*).
+        Must be passed in Authorization header.
+        Tokens have short expiration (typically 1-24 hours).
+        Not stored client-side (only in memory).
+
+  headers:
+    X-Correlation-Id:
+      description: Unique request identifier for tracing and debugging
+      schema:
+        type: string
+        format: uuid
+      required: false
+
+    X-Client-Version:
+      description: Widget version making the request
+      schema:
+        type: string
+        pattern: '^\d+\.\d+\.\d+$'
+      required: false
+
+    X-Rate-Limit-Limit:
+      description: Maximum requests per second for this token
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+
+    X-Rate-Limit-Remaining:
+      description: Requests remaining in current window
+      schema:
+        type: integer
+        minimum: 0
+
+    X-Rate-Limit-Reset:
+      description: Unix timestamp when rate limit counter resets
+      schema:
+        type: integer
 
   schemas:
     WidgetChatRequest:
@@ -110,55 +223,76 @@ components:
           type: string
           minLength: 1
           maxLength: 4000
+          description: User message - sanitized server-side
         sessionId:
           type: string
+          format: uuid
+          description: Persistent session identifier
         conversationId:
           type:
             - string
             - 'null'
+          format: uuid
+          description: Ongoing conversation ID (null for new conversations)
         metadata:
           type: object
           required:
             - channel
             - url
-            - title
           properties:
             channel:
               type: string
               enum:
                 - external-widget
+              description: Must be 'external-widget' - identifies this channel
             url:
               type: string
+              format: uri
+              maxLength: 2048
+              description: Current page URL - validated against allowlist
             title:
               type:
                 - string
                 - 'null'
+              maxLength: 500
+              description: Page title
             locale:
               type:
                 - string
                 - 'null'
+              pattern: '^[a-z]{2}(-[A-Z]{2})?$'
+              description: BCP 47 language tag (e.g., en, es-MX)
             referrer:
               type:
                 - string
                 - 'null'
+              format: uri
+              maxLength: 2048
+              description: Referrer URL
             userAgent:
               type:
                 - string
                 - 'null'
+              maxLength: 500
+              description: Browser user agent
 
     WidgetChatResponse:
       type: object
       required:
         - reply
-        - conversationId
         - messageId
       properties:
         reply:
           type: string
+          description: AI-generated response (always safe, no code)
         conversationId:
           type: string
+          format: uuid
+          description: Conversation ID (new if this was first message)
         messageId:
           type: string
+          format: uuid
+          description: Unique message ID for this exchange
         usage:
           type:
             - object
@@ -166,14 +300,19 @@ components:
           properties:
             inputTokens:
               type: integer
+              minimum: 0
             outputTokens:
               type: integer
+              minimum: 0
             totalTokens:
               type: integer
+              minimum: 0
+          description: Token usage metrics (if applicable)
         errorCode:
           type:
             - string
             - 'null'
+          description: Application error code (null if success)
 
     WidgetConnectionTestRequest:
       type: object
@@ -195,12 +334,17 @@ components:
       properties:
         ok:
           type: boolean
+          description: Connection test passed
         tenantId:
           type: string
+          description: Tenant ID associated with this token
         allowedDomain:
           type: boolean
+          description: Whether the request origin is in the allowlist
         apiVersion:
           type: string
+          pattern: '^v\d+$'
+          description: API version (e.g., v1)
 
     PublicApiError:
       type: object
@@ -212,14 +356,21 @@ components:
           type: string
           enum:
             - INVALID_TOKEN
+            - TOKEN_EXPIRED
             - DOMAIN_NOT_ALLOWED
             - RATE_LIMITED
             - VALIDATION_ERROR
+            - INVALID_REQUEST
             - BACKEND_UNAVAILABLE
             - INTERNAL_ERROR
+          description: Machine-readable error code (safe for client display)
         message:
           type: string
+          maxLength: 200
+          description: Human-readable error message (no technical details or stack traces)
         requestId:
           type:
             - string
             - 'null'
+          format: uuid
+          description: Request ID for server-side lookup and debugging

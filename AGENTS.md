@@ -2,9 +2,18 @@
 
 Este repo forma parte de la familia FluxBot Studio y **NO contiene backend de negocio**.
 
+## 🔁 Regla Git automática obligatoria
+
+Este repo debe tener hooks activos (`npm run githooks:install`) con este flujo:
+1. `pre-commit` ejecuta `qa:gate`.
+2. `post-commit` sincroniza (`fetch` + `pull --rebase --autostash` si aplica).
+3. `post-commit` re-ejecuta `qa:gate`.
+4. `post-commit` hace `push`.
+5. Si hay conflicto, resolver y repetir `qa:gate` antes de empujar.
+
 ## Repos de la familia
 
-- `fluxbot-studio-ia`: Admin Shopify, dashboard, configuración
+- `fluxbot-studio-ia-shopify`: Admin Shopify, dashboard, configuración
 - `fluxbot-studio-back-ia`: Backend central, IA, RAG, tenants, tokens, conversaciones, **fuente única de verdad**
 - `fluxbot-studio-contracts`: Contratos OpenAPI compartidos
 - **Este repo**: Widget embebible externo para webs sin Shopify

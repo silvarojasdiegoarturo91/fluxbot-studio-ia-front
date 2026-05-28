@@ -43,7 +43,7 @@ describe("ConnectionTester (Unit Tests)", () => {
     const endpoint = "";
     const domain = "";
 
-    const isComplete = token && endpoint && domain;
+    const isComplete = Boolean(token && endpoint && domain);
     expect(isComplete).toBe(false);
   });
 

@@ -1,0 +1,48 @@
+{
+  "agents": [
+    {
+      "id": "architecture-expert-web-front",
+      "name": "Software Architecture Expert - Frontend Web Externo",
+      "description": "Especialista en Next.js, landing, demo y widget embebible",
+      "role": "web_frontend_architect",
+      "capabilities": [
+        "next_optimization",
+        "seo_performance",
+        "widget_encapsulation",
+        "conversion_optimization",
+        "mobile_first"
+      ],
+      "scope": "frontend_web",
+      "instructions_file": ".agents/architecture-expert.md",
+      "active": true,
+      "metadata": {
+        "version": "1.0",
+        "created": "2026-05-20",
+        "tech_stack": [
+          "Next.js 16",
+          "React 19",
+          "TypeScript",
+          "Tailwind CSS",
+          "Vitest"
+        ],
+        "pages": [
+          "Landing (SEO optimizado)",
+          "Pricing (conversión)",
+          "Contact (leads)",
+          "Install Generator (product-led)",
+          "Demo (showcase)"
+        ],
+        "review_checklist": [
+          "seo_metadata",
+          "core_web_vitals",
+          "mobile_responsive",
+          "conversion_rate",
+          "api_integration",
+          "error_handling",
+          "widget_isolation",
+          "accessibility"
+        ]
+      }
+    }
+  ]
+}

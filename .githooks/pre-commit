@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "[pre-commit] Running qa:gate..."
+npm run --silent qa:gate

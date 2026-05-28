@@ -29,6 +29,10 @@ export default function Home() {
             Fluxbot Studio IA te permite vender, responder dudas y capturar
             clientes desde tu sitio web con un widget que instalas en 5 minutos.
           </p>
+          <p className="max-w-xl rounded-xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
+            La web pública queda solo para ventas e instalación. La operativa y el entrenamiento
+            del chatbot se separan en un panel aparte.
+          </p>
           <div className="flex flex-wrap gap-3">
             <EventLink
               href="/install"

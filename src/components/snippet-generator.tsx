@@ -8,6 +8,8 @@ import { ConnectionTester } from "./connection-tester";
 type WidgetConfig = {
   token: string;
   domain: string;
+  gateway: string;
+  securityMode: "gateway" | "direct";
   position: "left" | "right";
   primaryColor: string;
   greeting: string;
@@ -17,6 +19,8 @@ type WidgetConfig = {
 const initialConfig: WidgetConfig = {
   token: "demo-token-123",
   domain: "example.com",
+  gateway: "https://panel.tu-dominio.com/api/v1/widget",
+  securityMode: "gateway",
   position: "right",
   primaryColor: "#0ea5e9",
   greeting: "Hola, ¿en qué puedo ayudarte hoy?",
@@ -41,7 +45,7 @@ export function SnippetGenerator() {
   const scriptUrl =
     typeof window === "undefined"
       ? "https://tu-dominio.com/chat-widget.js"
-      : `${window.location.origin}/chat-widget.js`;
+      : `https://panel.tu-dominio.com/chat-widget.js`;
 
   const snippet = useMemo(
     () =>
@@ -49,6 +53,8 @@ export function SnippetGenerator() {
   src="${scriptUrl}"
   data-token="${config.token}"
   data-domain="${config.domain}"
+  data-gateway="${config.gateway}"
+  data-security-mode="${config.securityMode}"
   data-api-version="v1"
   data-tenant-mode="external"
   data-position="${config.position}"
@@ -104,6 +110,20 @@ export function SnippetGenerator() {
           </select>
         </label>
         <label className="space-y-1">
+          <span className="text-sm text-slate-300">Modo de seguridad</span>
+          <select
+            value={config.securityMode}
+            onChange={(event) =>
+              setConfig({ ...config, securityMode: event.target.value as "gateway" | "direct" })
+            }
+            className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2"
+            aria-label="Security mode"
+          >
+            <option value="gateway">Gateway seguro (recomendado)</option>
+            <option value="direct">Directo al endpoint</option>
+          </select>
+        </label>
+        <label className="space-y-1">
           <span className="text-sm text-slate-300">Color principal</span>
           <input
             type="color"
@@ -111,6 +131,16 @@ export function SnippetGenerator() {
             onChange={(event) => setConfig({ ...config, primaryColor: event.target.value })}
             className="h-10 w-full rounded-lg border border-white/10 cursor-pointer"
             aria-label="Primary color"
+          />
+        </label>
+        <label className="space-y-1">
+          <span className="text-sm text-slate-300">Gateway de seguridad</span>
+          <input
+            value={config.gateway}
+            onChange={(event) => setConfig({ ...config, gateway: event.target.value })}
+            className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-sm"
+            placeholder="https://panel.tu-dominio.com/api/v1/widget"
+            aria-label="Security gateway"
           />
         </label>
         <label className="space-y-1">

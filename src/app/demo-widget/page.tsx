@@ -5,13 +5,19 @@ import { useState, useEffect } from "react";
 interface WidgetSettings {
   token: string;
   endpoint: string;
+  gateway: string;
+  securityMode: "gateway" | "direct";
+  domain: string;
   color: string;
   greeting: string;
 }
 
 const initialSettings: WidgetSettings = {
-  token: "demo-token-123",
+  token: "tk_demo_fluxbot_123456",
   endpoint: "https://api.tu-dominio.com/chat",
+  gateway: "https://panel.tu-dominio.com/api/v1/widget",
+  securityMode: "gateway",
+  domain: "localhost",
   color: "#0ea5e9",
   greeting: "Hola, ¿en qué puedo ayudarte?",
 };
@@ -21,7 +27,7 @@ export default function DemoWidgetPage() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
-    const scriptUrl = `${window.location.origin}/chat-widget.js`;
+    const scriptUrl = `https://panel.tu-dominio.com/chat-widget.js`;
     const existingScript = document.querySelector('script[data-token]');
 
     if (existingScript) {
@@ -31,6 +37,9 @@ export default function DemoWidgetPage() {
     const script = document.createElement("script");
     script.src = scriptUrl;
     script.setAttribute("data-token", settings.token);
+    script.setAttribute("data-domain", settings.domain);
+    script.setAttribute("data-gateway", settings.gateway);
+    script.setAttribute("data-security-mode", settings.securityMode);
     script.setAttribute("data-endpoint", settings.endpoint);
     script.setAttribute("data-primary-color", settings.color);
     script.setAttribute("data-greeting", settings.greeting);
@@ -74,7 +83,46 @@ export default function DemoWidgetPage() {
                 value={settings.token}
                 onChange={(e) => setSettings({ ...settings, token: e.target.value })}
                 className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-white focus:border-sky-500 focus:outline-none"
-                placeholder="demo-token-123"
+                placeholder="tk_demo_fluxbot_123456"
+              />
+            </label>
+
+            <label className="block space-y-1">
+              <span className="text-sm font-medium text-slate-300">Dominio</span>
+              <input
+                type="text"
+                value={settings.domain}
+                onChange={(e) => setSettings({ ...settings, domain: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-white focus:border-sky-500 focus:outline-none"
+                placeholder="example.com"
+              />
+            </label>
+
+            <label className="block space-y-1">
+              <span className="text-sm font-medium text-slate-300">Modo seguridad</span>
+              <select
+                value={settings.securityMode}
+                onChange={(e) =>
+                  setSettings({
+                    ...settings,
+                    securityMode: e.target.value as "gateway" | "direct",
+                  })
+                }
+                className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-white focus:border-sky-500 focus:outline-none"
+              >
+                <option value="gateway">Gateway seguro</option>
+                <option value="direct">Directo al endpoint</option>
+              </select>
+            </label>
+
+            <label className="block space-y-1">
+              <span className="text-sm font-medium text-slate-300">Gateway seguridad</span>
+              <input
+                type="text"
+                value={settings.gateway}
+                onChange={(e) => setSettings({ ...settings, gateway: e.target.value })}
+                className="w-full rounded-lg border border-white/10 bg-slate-900 px-3 py-2 text-white focus:border-sky-500 focus:outline-none"
+                placeholder="https://panel.tu-dominio.com/api/v1/widget"
               />
             </label>
 
@@ -149,7 +197,7 @@ export default function DemoWidgetPage() {
             {JSON.stringify(
               {
                 settings,
-                widgetUrl: `${typeof window !== "undefined" ? window.location.origin : "/"}/chat-widget.js`,
+                widgetUrl: "https://panel.tu-dominio.com/chat-widget.js",
                 timestamp: new Date().toISOString(),
               },
               null,

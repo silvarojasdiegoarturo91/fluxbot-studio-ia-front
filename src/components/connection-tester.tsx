@@ -47,7 +47,7 @@ export function ConnectionTester({ onValidationChange }: ConnectionTesterProps) 
     setError(null);
 
     try {
-      const response = await fetch("/api/v1/widget/connection-test", {
+      const response = await fetch("https://panel.tu-dominio.com/api/v1/widget/connection-test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, endpoint, domain }),

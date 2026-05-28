@@ -8,20 +8,26 @@
       var scripts = document.getElementsByTagName("script");
       return scripts[scripts.length - 1];
     })();
-
   if (!currentScript) return;
+
+  var scriptSrc = currentScript.getAttribute("src") || "";
+  var scriptBaseUrl = scriptSrc.split("/chat-widget.js")[0] || window.location.origin;
+  var fallbackDomain = window.location.hostname;
 
   var config = {
     token: currentScript.dataset.token || "",
+    domain: currentScript.dataset.domain || fallbackDomain,
+    gateway: currentScript.dataset.gateway || scriptBaseUrl + "/api/v1/widget",
+    securityMode: currentScript.dataset.securityMode || "gateway",
     position: currentScript.dataset.position === "left" ? "left" : "right",
     primaryColor: currentScript.dataset.primaryColor || "#0ea5e9",
-    greeting:
-      currentScript.dataset.greeting || "Hola, soy tu asistente virtual.",
-    endpoint: currentScript.dataset.endpoint || "",
+    greeting: currentScript.dataset.greeting || "Hola, soy tu asistente virtual.",
     title: currentScript.dataset.title || "Fluxbot Assistant",
+    endpoint: currentScript.dataset.endpoint || "",
   };
 
   var side = config.position === "left" ? "left" : "right";
+  var sessionToken = "";
 
   var style = document.createElement("style");
   style.innerHTML =
@@ -79,6 +85,13 @@
   container.appendChild(toggle);
   document.body.appendChild(container);
 
+  function randomNonce() {
+    if (window.crypto && window.crypto.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+    return "nonce-" + Math.random().toString(36).slice(2) + Date.now();
+  }
+
   function appendMessage(text, role) {
     var bubble = document.createElement("div");
     bubble.className = "fluxbot-msg " + (role === "user" ? "fluxbot-user" : "fluxbot-bot");
@@ -95,28 +108,68 @@
     if (text.indexOf("instal") >= 0) {
       return "La instalación tarda menos de 5 minutos con el snippet.";
     }
-    return "Gracias por tu mensaje. ¿Quieres demo, precios o instalación?";
+    return "No estoy diseñado para ese fin. Puedo ayudarte con instalación, precios, demo y soporte.";
   }
 
-  appendMessage(config.greeting, "bot");
-
-  toggle.addEventListener("click", function () {
-    panel.style.display = panel.style.display === "flex" ? "none" : "flex";
-  });
-
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-    var userText = input.value.trim();
-    if (!userText) return;
-    appendMessage(userText, "user");
-    input.value = "";
-
-    if (!config.endpoint) {
-      appendMessage(localReply(userText), "bot");
-      return;
+  function ensureSessionToken() {
+    if (config.securityMode !== "gateway") {
+      return Promise.resolve("");
     }
+    if (sessionToken) {
+      return Promise.resolve(sessionToken);
+    }
+    return fetch(config.gateway + "/session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: config.token,
+        domain: config.domain,
+      }),
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return Promise.reject(new Error("Session error"));
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        sessionToken = data.sessionToken || "";
+        if (!sessionToken) {
+          return Promise.reject(new Error("Missing session token"));
+        }
+        return sessionToken;
+      });
+  }
 
-    fetch(config.endpoint, {
+  function askGateway(userText) {
+    return ensureSessionToken().then(function (token) {
+      return fetch(config.gateway + "/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+          "X-Widget-Nonce": randomNonce(),
+        },
+        body: JSON.stringify({
+          message: userText,
+          domain: config.domain,
+        }),
+      }).then(function (response) {
+        if (!response.ok) {
+          return Promise.reject(new Error("Policy gateway error"));
+        }
+        return response.json();
+      });
+    });
+  }
+
+  function askDirectEndpoint(userText) {
+    if (!config.endpoint) {
+      return Promise.resolve({ reply: localReply(userText) });
+    }
+    return fetch(config.endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -133,11 +186,37 @@
         return response.json();
       })
       .then(function (data) {
+        return { reply: data.reply || data.message || "Recibimos tu mensaje." };
+      });
+  }
+
+  appendMessage(config.greeting, "bot");
+
+  toggle.addEventListener("click", function () {
+    panel.style.display = panel.style.display === "flex" ? "none" : "flex";
+  });
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var userText = input.value.trim();
+    if (!userText) return;
+
+    appendMessage(userText, "user");
+    input.value = "";
+
+    var flow =
+      config.securityMode === "gateway" ? askGateway(userText) : askDirectEndpoint(userText);
+
+    flow
+      .then(function (data) {
         var reply = data.reply || data.message || "Recibimos tu mensaje.";
         appendMessage(reply, "bot");
       })
       .catch(function () {
-        appendMessage("No se pudo conectar al endpoint configurado.", "bot");
+        appendMessage(
+          "No fue posible procesar el mensaje. Verifica tu configuración de seguridad y dominio autorizado.",
+          "bot",
+        );
       });
   });
 })();

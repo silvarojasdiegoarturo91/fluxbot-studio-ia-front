@@ -59,6 +59,11 @@ export default function InstallPage() {
             <strong>Paso 5:</strong> Publica y verifica que el widget
             aparezca.
           </li>
+          <li>
+            <strong>Paso 6:</strong> La operativa, el entrenamiento y las políticas se gestionan
+            en un panel separado, normalmente en un subdominio como
+            <code> panel.tu-dominio.com</code>.
+          </li>
         </ol>
       </section>
 

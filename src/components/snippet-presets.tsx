@@ -13,7 +13,8 @@ interface PresetSnippet {
 }
 
 function getPreset(type: PresetType, domain: string, token: string): PresetSnippet {
-  const scriptUrl = typeof window !== "undefined" ? `${window.location.origin}/chat-widget.js` : "https://tu-dominio.com/chat-widget.js";
+  const scriptUrl = typeof window !== "undefined" ? `https://panel.tu-dominio.com/chat-widget.js` : "https://panel.tu-dominio.com/chat-widget.js";
+  const gatewayUrl = typeof window !== "undefined" ? `https://panel.tu-dominio.com/api/v1/widget` : "https://panel.tu-dominio.com/api/v1/widget";
 
   const presets: Record<PresetType, PresetSnippet> = {
     html: {
@@ -25,6 +26,8 @@ function getPreset(type: PresetType, domain: string, token: string): PresetSnipp
   src="${scriptUrl}"
   data-token="${token}"
   data-domain="${domain}"
+  data-gateway="${gatewayUrl}"
+  data-security-mode="gateway"
   data-api-version="v1"
   data-tenant-mode="external"
   data-position="right"
@@ -49,6 +52,8 @@ function add_fluxbot_widget() {
       src="${scriptUrl}"
       data-token="${token}"
       data-domain="${domain}"
+      data-gateway="${gatewayUrl}"
+      data-security-mode="gateway"
       data-api-version="v1"
       data-tenant-mode="external"
       data-position="right"
@@ -71,6 +76,8 @@ function add_fluxbot_widget() {
   src="${scriptUrl}"
   data-token="${token}"
   data-domain="${domain}"
+  data-gateway="${gatewayUrl}"
+  data-security-mode="gateway"
   data-api-version="v1"
   data-tenant-mode="external"
   data-position="right"
@@ -90,6 +97,8 @@ export default function App() {
     script.src = "${scriptUrl}";
     script.setAttribute('data-token', '${token}');
     script.setAttribute('data-domain', '${domain}');
+    script.setAttribute('data-gateway', '${gatewayUrl}');
+    script.setAttribute('data-security-mode', 'gateway');
     script.setAttribute('data-api-version', 'v1');
     script.setAttribute('data-tenant-mode', 'external');
     script.setAttribute('data-position', 'right');
@@ -130,6 +139,8 @@ export default function RootLayout({
           src="${scriptUrl}"
           data-token="${token}"
           data-domain="${domain}"
+          data-gateway="${gatewayUrl}"
+          data-security-mode="gateway"
           data-api-version="v1"
           data-tenant-mode="external"
           data-position="right"
@@ -162,6 +173,7 @@ Esperado en futuras versiones:
 NEXT_PUBLIC_FLUXBOT_TOKEN=${token}
 NEXT_PUBLIC_FLUXBOT_DOMAIN=${domain}
 NEXT_PUBLIC_FLUXBOT_API_VERSION=v1
+NEXT_PUBLIC_FLUXBOT_GATEWAY=${gatewayUrl}
 
 # 2. En tu layout.tsx:
 import Script from 'next/script';
@@ -174,6 +186,8 @@ export default function RootLayout() {
           src="/chat-widget.js"
           data-token={process.env.NEXT_PUBLIC_FLUXBOT_TOKEN}
           data-domain={process.env.NEXT_PUBLIC_FLUXBOT_DOMAIN}
+          data-gateway={process.env.NEXT_PUBLIC_FLUXBOT_GATEWAY}
+          data-security-mode="gateway"
           data-api-version={process.env.NEXT_PUBLIC_FLUXBOT_API_VERSION}
           data-tenant-mode="external"
           strategy="afterInteractive"
