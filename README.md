@@ -36,6 +36,8 @@ npm run build
 npm run start
 ```
 
+Nota: `npm run dev` y `npm run build` están configurados para usar fallback WASM de SWC con webpack por compatibilidad en entornos Linux donde el binario nativo de SWC puede fallar con `Bus error (core dumped)`.
+
 ## Snippet de instalación
 
 El snippet se genera desde `/install`, pero este es el formato base:

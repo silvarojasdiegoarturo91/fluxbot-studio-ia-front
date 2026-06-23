@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NEXT_TEST_WASM=1 next dev --webpack",
+    "dev:turbo": "next dev",
     "contracts:pull": "node scripts/pull-contracts.mjs",
     "api:generate": "openapi-ts",
     "api:sync": "npm run contracts:pull && npm run api:generate",
@@ -12,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "qa:gate": "npm run contracts:pull && npm run typecheck && npm run lint && npm run test",
-    "build": "next build",
+    "build": "NEXT_TEST_WASM=1 next build --webpack",
+    "build:turbo": "next build",
     "start": "next start",
     "githooks:install": "git config core.hooksPath .githooks"
   },
