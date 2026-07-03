@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 set -eu
 
-echo "[pre-commit] Running qa:gate..."
-npm run --silent qa:gate
+. ./.githooks/strict-flow.sh
+
+strict_check_openspec_conflicts
+strict_run_qa
+strict_run_doc_hook pre-commit
+strict_require_no_unstaged_changes
+
+echo "[strict-flow] pre-commit passed."

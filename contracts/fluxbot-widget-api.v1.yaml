@@ -345,6 +345,10 @@ components:
           type: string
           pattern: '^v\d+$'
           description: API version (e.g., v1)
+        paymentInfo:
+          $ref: '#/components/schemas/StorefrontPaymentInfoDto'
+          description: Storefront installment payment configurations
+          nullable: true
 
     PublicApiError:
       type: object
