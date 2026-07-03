@@ -374,3 +374,28 @@ components:
             - 'null'
           format: uuid
           description: Request ID for server-side lookup and debugging
+
+    StorefrontPaymentInfoDto:
+      type: object
+      properties:
+        enabledProviders:
+          type: array
+          items:
+            type: string
+        supportedPresentmentCurrencies:
+          type: array
+          items:
+            type: string
+        shopPayInstallments:
+          type: object
+          nullable: true
+          properties:
+            minPrice:
+              type: string
+            maxPrice:
+              type: string
+            financingPlans:
+              type: array
+              items:
+                type: object
+
