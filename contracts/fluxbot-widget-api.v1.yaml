@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: FluxBot External Widget API
-  version: 1.0.0
+  version: 1.1.0
   description: Public contract for the embeddable external widget channel.
 servers:
   - url: https://api.fluxbot.ai
@@ -347,7 +347,7 @@ components:
           description: API version (e.g., v1)
         paymentInfo:
           $ref: '#/components/schemas/StorefrontPaymentInfoDto'
-          description: Storefront installment payment configurations
+          description: Storefront payment configuration returned by connection-test when available.
           nullable: true
 
     PublicApiError:
@@ -402,4 +402,3 @@ components:
               type: array
               items:
                 type: object
-
