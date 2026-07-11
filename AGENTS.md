@@ -24,6 +24,12 @@ Este repo debe tener hooks activos (`npm run githooks:install`) con este flujo:
 
 Si algo no está en el contrato, no existe en este repo.
 
+## Regla de widgets locales
+
+Requisito raíz: `REQ-ROOT-012`.
+
+No confundir el SDK externo con el widget Shopify storefront. El SDK externo se sirve localmente solo con `scripts/dev-all.sh` en `http://localhost:3004`; el wrapper `scripts/dev-shopify-admin-local.sh` no lo levanta. En desarrollo, el snippet del SDK externo debe usar `src="http://localhost:3004/chat-widget.js"` y `data-endpoint="http://localhost:3001"` o un túnel local explícito. El widget Shopify usa `chat-launcher.js` y rutas `/apps/fluxbot/*`.
+
 ## Prohibido (no implementar aquí)
 
 - ❌ Crear endpoints backend nuevos
