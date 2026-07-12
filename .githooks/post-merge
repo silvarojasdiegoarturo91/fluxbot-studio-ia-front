@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+set -eu
+
+. ./.githooks/strict-flow.sh
+
+strict_post_merge_verify
