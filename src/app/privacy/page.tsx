@@ -1,82 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LegalPage, PrivacyContact } from "@/components/legal/legal-page";
 
-export const metadata: Metadata = {
-  title: "Política de privacidad",
-  description: "Política de privacidad pública de Fluxbot Studio IA.",
-};
+export const metadata: Metadata = { title: "Política de privacidad", description: "Información RGPD sobre el tratamiento de datos en FluxBot." };
 
 export default function PrivacyPage() {
-  return (
-    <article className="mx-auto max-w-3xl space-y-8 text-slate-300">
-      <header className="space-y-3">
-        <p className="text-sm font-medium text-sky-300">Última actualización: 19 de julio de 2026</p>
-        <h1 className="text-4xl font-semibold tracking-tight text-white">Política de privacidad</h1>
-        <p>
-          Esta política explica cómo Fluxbot Studio IA trata datos personales al ofrecer su widget,
-          sus servicios de inteligencia artificial y su aplicación para comercios.
-        </p>
-      </header>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-white">Datos que tratamos</h2>
-        <p>
-          Podemos tratar datos de contacto e información que un visitante escriba en el chat,
-          identificadores técnicos de sesión, datos de configuración del comercio y contenido del
-          catálogo o de las páginas que el comercio decide sincronizar. Cuando el comercio habilita
-          funciones de pedidos o atención al cliente, el tratamiento se limita a los datos necesarios
-          para prestar esa función.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-white">Finalidades y base de uso</h2>
-        <p>
-          Usamos esos datos para responder conversaciones, configurar y mejorar el asistente del
-          comercio, prevenir abuso, mantener la seguridad y atender solicitudes de soporte. El
-          comercio es responsable de informar a sus visitantes y de obtener las bases legales o los
-          consentimientos que correspondan en su jurisdicción.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-white">Proveedores y transferencias</h2>
-        <p>
-          Para generar respuestas, Fluxbot puede usar proveedores de infraestructura y de modelos de
-          inteligencia artificial configurados para el servicio. No vendemos datos personales. Antes
-          de activar una integración, el comercio debe revisar los términos y el anexo de tratamiento
-          aplicable del proveedor. La información actualizada sobre subprocesadores y regiones puede
-          solicitarse mediante nuestro canal de contacto.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-white">Conservación y seguridad</h2>
-        <p>
-          Conservamos los datos solo durante el tiempo necesario para operar el servicio, cumplir las
-          obligaciones legales y aplicar la configuración de retención del comercio. Aplicamos
-          controles de acceso, autenticación de servicios, cifrado en tránsito y registros operativos
-          limitados. Las copias de seguridad se gestionan mediante ciclos de retención independientes.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-white">Solicitudes de acceso, exportación y eliminación</h2>
-        <p>
-          Las personas interesadas pueden ejercer sus derechos a través del comercio con el que
-          interactuaron. Los comercios que usan Shopify también pueden iniciar las solicitudes GDPR
-          de Shopify; Fluxbot las propaga al sistema de IA para su procesamiento. Para consultas de
-          privacidad o soporte, utiliza nuestro <Link className="text-sky-300 underline hover:text-sky-200" href="/contact">formulario de contacto</Link>.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold text-white">Cambios de esta política</h2>
-        <p>
-          Podemos actualizar esta política para reflejar cambios normativos, operativos o del
-          servicio. Publicaremos la nueva fecha de actualización en esta página.
-        </p>
-      </section>
-    </article>
-  );
+  return <LegalPage eyebrow="RGPD y privacidad" title="Política de privacidad" summary="Explicamos qué datos tratamos, para qué y cómo pueden ejercer sus derechos las personas y los comercios que usan FluxBot." sections={[
+    { title: "Roles y alcance", content: <p>FluxBot Studio IA presta una plataforma de comercio conversacional. Para los datos de visitantes de una tienda, el comercio es normalmente responsable del tratamiento y FluxBot actúa como encargado siguiendo sus instrucciones. Para datos de cuenta, facturación, soporte y seguridad de FluxBot, FluxBot actúa como responsable.</p> },
+    { title: "Datos y finalidades", content: <><p>Podemos tratar datos de cuenta y contacto, configuración de la tienda, catálogo sincronizado, mensajes intercambiados con el asistente, identificadores técnicos y registros de seguridad. Los usamos para prestar el servicio, responder conversaciones, mantener la seguridad, prevenir abuso, atender soporte, cumplir obligaciones legales y mejorar el producto de forma compatible con la configuración contratada.</p><p>No vendemos datos personales ni usamos el contenido de conversaciones para fines publicitarios de terceros.</p></> },
+    { title: "Base jurídica, destinatarios y transferencias", content: <><p>El tratamiento se basa en la ejecución del contrato, el interés legítimo en seguridad y mejora del servicio, el cumplimiento de obligaciones legales y, cuando corresponda, el consentimiento. Los proveedores de alojamiento, comunicaciones, analítica contratada y modelos de IA solo acceden a datos cuando es necesario para prestar el servicio y bajo compromisos de confidencialidad y protección de datos.</p><p>Cuando exista una transferencia internacional, se aplicarán las garantías exigibles, como cláusulas contractuales tipo u otra base válida. La relación vigente de subencargados puede solicitarse mediante el <PrivacyContact />.</p></> },
+    { title: "Conservación y seguridad", content: <p>Conservamos la información durante la relación contractual y el periodo necesario para cumplir obligaciones legales, resolver incidencias y aplicar la retención configurada por el comercio. Aplicamos medidas técnicas y organizativas razonables, como control de acceso, cifrado en tránsito, segregación por comercio y registros limitados de seguridad.</p> },
+    { title: "Derechos y solicitudes Shopify", content: <><p>Puede solicitar acceso, rectificación, supresión, oposición, limitación, portabilidad o retirar un consentimiento, cuando corresponda. Los visitantes deben contactar primero con la tienda con la que interactuaron; el comercio puede trasladar la solicitud a FluxBot. Para una solicitud relacionada con FluxBot, use el <PrivacyContact />.</p><p>Las aplicaciones públicas de Shopify deben atender los webhooks <code>customers/data_request</code>, <code>customers/redact</code> y <code>shop/redact</code>. FluxBot diseña su operativa para confirmar estas solicitudes y completar la acción dentro de los plazos aplicables, salvo obligación legal de conservación.</p></> },
+    { title: "Reclamaciones y cambios", content: <p>Puede reclamar ante la autoridad de protección de datos competente, incluida la AEPD en España. Actualizaremos esta página cuando cambie el servicio o la normativa aplicable.</p> },
+  ]} />;
 }

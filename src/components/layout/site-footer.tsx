@@ -32,8 +32,12 @@ export function SiteFooter() {
 
   const legalLinks = [
     { label: t("footer.privacy_policy"), href: "/privacy" },
-    { label: t("footer.ai_compliance"), href: "/ai-compliance" },
     { label: t("footer.terms"), href: "/terms" },
+    { label: "Cookies", href: "/cookies" },
+    { label: "Accesibilidad", href: "/accessibility" },
+    { label: t("footer.ai_compliance"), href: "/ai-compliance" },
+    { label: "Tratamiento de datos", href: "/data-processing" },
+    { label: "Aviso legal", href: "/legal-notice" },
   ];
 
   return (
@@ -64,7 +68,7 @@ export function SiteFooter() {
           </div>
 
           <div className="lg:w-2/3">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
               <div>
                 <h3 className="font-medium text-white mb-4">{t("footer.product")}</h3>
                 <ul className="space-y-3">
