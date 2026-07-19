@@ -19,15 +19,19 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     });
 
     lenisRef.current = lenis;
+    let frameId: number | null = null;
 
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frameId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    frameId = requestAnimationFrame(raf);
 
     return () => {
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
       lenis.destroy();
       lenisRef.current = null;
     };
