@@ -1,0 +1,15 @@
+[Unit]
+Description=FluxBot Studio IA — Marketing site (Next.js standalone)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/fluxbot-studio-ia-front
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+Environment=PORT=3002
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
@@ -65,7 +66,7 @@ export default function PrivacyPage() {
           Las personas interesadas pueden ejercer sus derechos a través del comercio con el que
           interactuaron. Los comercios que usan Shopify también pueden iniciar las solicitudes GDPR
           de Shopify; Fluxbot las propaga al sistema de IA para su procesamiento. Para consultas de
-          privacidad o soporte, utiliza nuestro <a className="text-sky-300 underline hover:text-sky-200" href="/contact">formulario de contacto</a>.
+          privacidad o soporte, utiliza nuestro <Link className="text-sky-300 underline hover:text-sky-200" href="/contact">formulario de contacto</Link>.
         </p>
       </section>
 
