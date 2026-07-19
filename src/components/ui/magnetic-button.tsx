@@ -7,14 +7,12 @@ type Props = {
   children: ReactNode;
   className?: string;
   strength?: number;
-  as?: "button" | "a" | "div";
 };
 
 export function MagneticButton({
   children,
   className,
   strength = 4,
-  as: Tag = "div",
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);

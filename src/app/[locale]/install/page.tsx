@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { TextReveal } from "@/components/ui/text-reveal";
 import { SnippetGeneratorWrapper } from "@/components/snippet-generator-wrapper";
@@ -21,7 +21,6 @@ function SnippetGeneratorSkeleton() {
 
 export default function InstallPage() {
   const t = useTranslations("install_page");
-  const locale = useLocale();
 
   return (
     <div className="space-y-12">

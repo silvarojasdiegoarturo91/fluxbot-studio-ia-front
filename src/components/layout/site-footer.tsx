@@ -123,7 +123,7 @@ export function SiteFooter() {
 
         <div className="mt-12 pt-8 border-t border-white/5">
           <p className="text-xs text-slate-500">
-            {t("footer.copyright").replace("{year}", String(year))}
+            {t("footer.copyright", { year })}
           </p>
         </div>
       </div>

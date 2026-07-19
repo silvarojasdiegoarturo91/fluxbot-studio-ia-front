@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useInView, useSpring, useMotionValue } from "motion/react";
+import { useInView, useSpring, useMotionValue } from "motion/react";
 
 type Props = {
   from?: number;

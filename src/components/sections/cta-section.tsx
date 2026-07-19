@@ -10,7 +10,6 @@ import { MouseParallax } from "@/components/ui/mouse-parallax";
 
 export function CTASection() {
   const t = useTranslations("cta_final");
-  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   return (

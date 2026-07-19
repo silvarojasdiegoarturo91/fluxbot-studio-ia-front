@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 const PLACEHOLDER_LOGOS = [

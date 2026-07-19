@@ -2,6 +2,7 @@
 
 import { ReactNode, useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -29,6 +30,7 @@ type MegaMenuSection = {
 export function SiteHeader() {
   const t = useTranslations();
   const locale = useLocale();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -110,6 +112,7 @@ export function SiteHeader() {
   };
 
   const otherLocale = locale === "es" ? "en" : "es";
+  const localePath = pathname.replace(/^\/(es|en)(?=\/|$)/, "") || "/";
 
   return (
     <>
@@ -155,7 +158,7 @@ export function SiteHeader() {
 
           <div className="flex items-center gap-2">
             <Link
-              href={`/${otherLocale}${typeof window !== "undefined" ? window.location.pathname.replace(/^\/(es|en)/, "") : "/"}`}
+              href={`/${otherLocale}${localePath}`}
               className="hidden sm:flex items-center rounded-lg border border-white/10 px-2 py-1.5 text-xs text-slate-400 hover:text-white hover:border-white/20 transition-colors"
             >
               {otherLocale.toUpperCase()}
