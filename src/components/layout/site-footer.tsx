@@ -41,7 +41,7 @@ export function SiteFooter() {
   ];
 
   return (
-    <footer className="border-t border-white/10">
+    <footer className="border-t border-[#173b4d]/10 bg-[#f7f1e8] text-[#173b4d]">
       <div className="mx-auto max-w-7xl px-4 md:px-8 lg:px-10 py-16">
         <div className="flex flex-col gap-12 lg:flex-row">
           <div className="lg:w-1/3 shrink-0 flex flex-col gap-5">
@@ -49,15 +49,15 @@ export function SiteFooter() {
               <span className="text-sky-400">⚡</span>
               <span>{t("common.brand")}</span>
             </Link>
-            <p className="text-sm text-slate-400 max-w-xs">
+            <p className="max-w-xs text-sm text-[#526a76]">
               {t("footer.tagline")}
             </p>
-            <div className="flex items-center gap-3 text-sm text-slate-500">
+            <div className="flex items-center gap-3 text-sm text-[#526a76]">
               <a
                 href="https://www.linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-sky-400 transition-colors"
+                className="transition-colors hover:text-[#173b4d]"
                 aria-label="LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -70,11 +70,11 @@ export function SiteFooter() {
           <div className="lg:w-2/3">
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
               <div>
-                <h3 className="font-medium text-white mb-4">{t("footer.product")}</h3>
+                <h3 className="mb-4 font-semibold text-[#173b4d]">{t("footer.product")}</h3>
                 <ul className="space-y-3">
                   {productLinks.map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-opacity hover:opacity-100 opacity-65">
+                      <Link href={link.href} className="text-sm text-[#526a76] transition-colors hover:text-[#173b4d]">
                         {link.label}
                       </Link>
                     </li>
@@ -82,11 +82,11 @@ export function SiteFooter() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-medium text-white mb-4">{t("footer.features_section")}</h3>
+                <h3 className="mb-4 font-semibold text-[#173b4d]">{t("footer.features_section")}</h3>
                 <ul className="space-y-3">
                   {featureLinks.map((link) => (
                     <li key={link.href + link.label}>
-                      <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-opacity hover:opacity-100 opacity-65">
+                      <Link href={link.href} className="text-sm text-[#526a76] transition-colors hover:text-[#173b4d]">
                         {link.label}
                       </Link>
                     </li>
@@ -94,11 +94,11 @@ export function SiteFooter() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-medium text-white mb-4">{t("footer.resources")}</h3>
+                <h3 className="mb-4 font-semibold text-[#173b4d]">{t("footer.resources")}</h3>
                 <ul className="space-y-3">
                   {resourceLinks.map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-opacity hover:opacity-100 opacity-65">
+                      <Link href={link.href} className="text-sm text-[#526a76] transition-colors hover:text-[#173b4d]">
                         {link.label}
                       </Link>
                     </li>
@@ -106,11 +106,11 @@ export function SiteFooter() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-medium text-white mb-4">{t("footer.legal")}</h3>
+                <h3 className="mb-4 font-semibold text-[#173b4d]">{t("footer.legal")}</h3>
                 <ul className="space-y-3">
                   {legalLinks.map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-opacity hover:opacity-100 opacity-65">
+                      <Link href={link.href} className="text-sm text-[#526a76] transition-colors hover:text-[#173b4d]">
                         {link.label}
                       </Link>
                     </li>
@@ -121,8 +121,8 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/5">
-          <p className="text-xs text-slate-500">
+        <div className="mt-12 border-t border-[#173b4d]/10 pt-8">
+          <p className="text-xs text-[#526a76]">
             {t("footer.copyright", { year })}
           </p>
         </div>
