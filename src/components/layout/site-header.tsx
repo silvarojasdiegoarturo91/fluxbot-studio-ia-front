@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
@@ -124,8 +125,15 @@ export function SiteHeader() {
         }`}
       >
         <div className="mx-auto flex h-[70px] max-w-[1340px] items-center justify-between px-4 md:px-8 lg:px-10">
-          <Link href={`/${locale}`} className="flex items-center gap-2 text-lg font-bold tracking-tight">
-            <span className="text-sky-400">⚡</span>
+          <Link href={`/${locale}`} className="flex items-center gap-2 text-lg font-bold tracking-tight text-[#173b4d]">
+            <Image
+              src="/brand/fluxbot-shopify-icon.jpg"
+              alt=""
+              width={40}
+              height={40}
+              priority
+              className="h-9 w-9 rounded-[0.7rem] object-cover shadow-sm"
+            />
             <span className="hidden sm:inline">{t("common.brand")}</span>
             <span className="sm:hidden">FluxBot</span>
           </Link>
