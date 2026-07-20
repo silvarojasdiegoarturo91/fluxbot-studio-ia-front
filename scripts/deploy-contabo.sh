@@ -12,7 +12,7 @@ set -euo pipefail
 
 # --- Config (override via env) ---
 HOST="${CONTABO_HOST:-diego-contabo}"
-REMOTE_DIR="${REMOTE_DIR:-/var/www/fluxbot-studio-ia-front}"
+REMOTE_DIR="${REMOTE_DIR:-/home/diego/fluxbot-studio-ia-front}"
 SERVICE_NAME="${SERVICE_NAME:-fluxbot-studio-ia-front}"
 
 echo "▸ Building standalone output…"

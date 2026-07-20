@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/www/fluxbot-studio-ia-front
+WorkingDirectory=/home/diego/fluxbot-studio-ia-front
 ExecStart=/usr/bin/node server.js
 Restart=on-failure
 RestartSec=5
