@@ -11,7 +11,7 @@ import { GradientOrb } from "@/components/ui/gradient-orb";
 
 function SnippetGeneratorSkeleton() {
   return (
-    <div className="space-y-4">
+    <div className="marketing-legacy space-y-4">
       <div className="h-10 w-full rounded-lg bg-slate-800 animate-pulse" />
       <div className="h-10 w-full rounded-lg bg-slate-800 animate-pulse" />
       <div className="h-20 w-full rounded-lg bg-slate-800 animate-pulse" />

@@ -19,7 +19,7 @@ export default function PricingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="space-y-16">
+    <div className="marketing-legacy space-y-16">
       <section className="relative pt-12 pb-16 text-center overflow-hidden rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950">
         <GradientOrb color="sky" size={600} blur={200} className="-top-40 left-1/2 -translate-x-1/2" animate={false} />
         <div className="relative z-10">

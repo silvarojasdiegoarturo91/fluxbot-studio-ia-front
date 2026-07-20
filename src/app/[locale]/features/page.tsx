@@ -30,7 +30,7 @@ export default function FeaturesPage() {
   const locale = useLocale();
 
   return (
-    <div className="space-y-12">
+    <div className="marketing-legacy space-y-12">
       <header className="text-center pt-12">
         <TextReveal
           text="Funcionalidades"

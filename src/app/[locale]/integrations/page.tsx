@@ -23,7 +23,7 @@ export default function IntegrationsPage() {
   const locale = useLocale();
 
   return (
-    <div className="space-y-16">
+    <div className="marketing-legacy space-y-16">
       <section className="relative pt-12 pb-16 text-center overflow-hidden rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950">
         <GradientOrb color="sky" size={500} blur={200} className="-top-32 left-1/2 -translate-x-1/2" animate={false} />
         <div className="relative z-10">
